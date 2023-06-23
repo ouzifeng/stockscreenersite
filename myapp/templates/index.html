@@ -1,0 +1,25 @@
+<h1>hello world</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Short Name</th>
+        <th>Currency</th>
+        <th>Long Name</th>
+        <th>WHT Rate</th>
+        <th>Ord Seq No</th>
+        <th>Alias 1</th>
+        <th>Alias 2</th>
+        <th>Adjective 1</th>
+        <th>Adjective 2</th>
+        <th>Adjective 3</th>
+    </tr>
+    {% for country in countries %}
+    <tr>
+        <td>{{ country.ID }}</td>
+        <td>{{ country.ShortName }}</td>
+        <td>{{ country.Currency }}</td>
+        <td>{{ country.long_name }}</td>
+    </tr>
+    {% endfor %}
+</table>
