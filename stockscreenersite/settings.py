@@ -84,6 +84,9 @@ DATABASES = {
         'PASSWORD': 'o0KxlDJiIzQ5',
         'HOST': 'ep-rapid-truth-859980.eu-central-1.aws.neon.tech',
         'PORT': '5432',  # default PostgreSQL port
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 

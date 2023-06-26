@@ -3,7 +3,6 @@ from django.utils.text import slugify
 
 
 # Create your models here.
-
 class Country(models.Model):
     ID = models.AutoField(primary_key=True)
     ShortName = models.CharField(max_length=200)
@@ -20,7 +19,7 @@ class Country(models.Model):
     class Meta:
         managed = False
         db_table = 'country'
-        
+      
 class Stock(models.Model):
     ID = models.AutoField(primary_key=True, db_column='ID')
     CountryID = models.IntegerField(db_column='CountryID')
@@ -100,5 +99,27 @@ class CoFinExport(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'cofinexport'
+        db_table = 'cofinexport'      
         
+class CAGR(models.Model):
+    StockID = models.OneToOneField(Stock, on_delete=models.CASCADE, primary_key=True, db_column='StockID', unique=True)
+    Revenue_CAGR = models.FloatField(db_column='Revenue_CAGR')
+    Op_Inc_CAGR = models.FloatField(db_column='Op_Inc_CAGR')
+    Net_Inc_exc_ext_CAGR = models.FloatField(db_column='Net_Inc_exc_ext_CAGR')
+    EPS_CAGR = models.FloatField(db_column='EPS_CAGR')
+    Dividend_CAGR = models.FloatField(db_column='Dividend_CAGR')
+    CashOps_CAGR = models.FloatField(db_column='CashOps_CAGR')
+    Capex_CAGR = models.FloatField(db_column='Capex_CAGR')
+    Equity_CAGR = models.FloatField(db_column='Equity_CAGR')
+    buyback_ratio = models.FloatField(db_column='buyback_ratio')
+    goodwill_total_equity = models.FloatField(db_column='goodwill_total_equity')
+    RoburM = models.FloatField(db_column='RoburM')
+    Enterprise_ratio = models.FloatField(db_column='Enterprise_ratio')
+    EqPS_Price = models.FloatField(db_column='EqPS_Price')
+    Price_HiLo = models.FloatField(db_column='Price_HiLo')
+    P_E = models.FloatField(db_column='P_E')
+    Yield_Percent = models.FloatField(db_column='Yield_Percent')
+    PEG_Ratio = models.FloatField(db_column='PEG_Ratio')
+
+    class Meta:
+        db_table = 'cagr'
