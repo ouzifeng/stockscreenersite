@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Modern Business - Start Bootstrap Template</title>
+    <title>{{ stock.CompanyName }} Stock Analysis & Research</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -20,74 +20,68 @@
     {% load currency_symbols %}
     <main class="flex-shrink-0">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container px-5">
-                <a class="navbar-brand" href="index.html">Start Bootstrap</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation"><span
-                        class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                                <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
-                                <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
-                                <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        {% include 'global/nav-bar.html' %}
         <!-- Page Content-->
         <section class="py-5">
+
+            <div class="container">
+                <div class="input-group mb-3" style="max-width: 400px">
+                    <input type="text" class="form-control" id="search-input" placeholder="Search by stock name...">
+                </div>
+                <div id="search-results"></div>
+            </div>
+
             <div class="container my-5">
                 <div class="row gx-5" class="stock-chart">
-                    <h1>{{ stock.CompanyName }}</h1>
+                    <h1>{{ stock.CompanyName }} Fundamental Data</h1>
                     <div class="col-sm-8">
 
                         <!-- TradingView Widget BEGIN -->
                         <div class="tradingview-widget-container">
-                            <div id="tradingview_abcde"></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                            <script type="text/javascript">
-                                new TradingView.widget(
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script type="text/javascript"
+                                src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js"
+                                async>
                                     {
-                                        "autosize": false,
-                                        "width": "100%",
-                                        "height": "500px",
                                         "symbols": [
                                             [
-                                                "NYSE:ZTS"
+                                                "NYSE:ZTS|1M"
                                             ]
                                         ],
-                                        "interval": "D",
-                                        "timezone": "Etc/UTC",
-                                        "theme": "light",
-                                        "style": "1",
-                                        "locale": "en",
-                                        "toolbar_bg": "#f1f3f6",
-                                        "enable_publishing": false,
-                                        "allow_symbol_change": false,
-                                        "container_id": "tradingview_abcde"
+                                            "chartOnly": true,
+                                                "width": 800,
+                                                    "height": 500,
+                                                        "locale": "en",
+                                                            "colorTheme": "light",
+                                                                "autosize": false,
+                                                                    "showVolume": false,
+                                                                        "showMA": false,
+                                                                            "hideDateRanges": false,
+                                                                                "hideMarketStatus": false,
+                                                                                    "hideSymbolLogo": false,
+                                                                                        "scalePosition": "right",
+                                                                                            "scaleMode": "Normal",
+                                                                                                "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+                                                                                                    "fontSize": "10",
+                                                                                                        "noTimeScale": false,
+                                                                                                            "valuesTracking": "1",
+                                                                                                                "changeMode": "price-and-percent",
+                                                                                                                    "chartType": "area",
+                                                                                                                        "maLineColor": "#2962FF",
+                                                                                                                            "maLineWidth": 1,
+                                                                                                                                "maLength": 9,
+                                                                                                                                    "lineWidth": 2,
+                                                                                                                                        "lineType": 0,
+                                                                                                                                            "dateRanges": [
+                                                                                                                                                "1d|1",
+                                                                                                                                                "1m|30",
+                                                                                                                                                "3m|60",
+                                                                                                                                                "12m|1D",
+                                                                                                                                                "60m|1W",
+                                                                                                                                                "all|1M"
+                                                                                                                                            ]
                                     }
-                                );
-                            </script>
+                                </script>
                         </div>
                         <!-- TradingView Widget END -->
                         <div class="stock-info-1">
@@ -118,18 +112,47 @@
 
 
                     <div class="col-sm-4">
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="stock-info-2">
+                            <div class="tradingview-widget-container">
+                                <div class="tradingview-widget-container__widget"></div>
+                                <script type="text/javascript"
+                                    src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js"
+                                    async>
+                                        {
+                                            "symbol": "NYSE:ZTS",
+                                                "width": "100%",
+                                                    "colorTheme": "light",
+                                                        "isTransparent": true,
+                                                            "locale": "en"
+                                        }
+                                    </script>
+                            </div>
+                        </div>
+                        <!-- TradingView Widget END -->
                         <div class="stock-info">
                             <div class="table-responsive">
                                 <table class="table">
                                     <tbody>
                                         <tr>
+                                            <th>Country</th>
+                                            <td>{{ country_name }}</td>
+                                        </tr>
+                                        <tr>
                                             <th>PE Ratio</th>
                                             <td>{{ cagr_data.P_E|floatformat:2 }}</td>
                                         </tr>
+                                        {% if dividend %}
                                         <tr>
                                             <th>Dividend</th>
                                             <td>{{ yield_percent }}%</td>
                                         </tr>
+                                        {% else %}
+                                        <tr>
+                                            <th>Dividend</th>
+                                            <td>No dividend paid</td>
+                                        </tr>
+                                        {% endif %}
                                         <tr>
                                             <th>PEG Ratio</th>
                                             <td>{{ cagr_data.PEG_Ratio|floatformat:2 }}</td>
@@ -151,11 +174,16 @@
                                         </tr>
                                         <tr>
                                             <th>Share Price: {{ stock.CurrentDate }}</th>
-                                            <td>{{ stock.RefCurry|get_currency_symbol }}{{ stock.CurrentValue }}</td>
+                                            <td>{{ stock.RefCurry|get_currency_symbol }}{{ stock.CurrentValue }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Market Cap</th>
                                             <td>${{ stock.MktCap|floatformat:2 }}B</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sector</th>
+                                            <td>{{ sector_name }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -163,136 +191,134 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-                <div class="row gx-5">
-                    <div class="col-lg-3">
-                        <div class="d-flex align-items-center mt-lg-5 mb-4">
-                            <img class="img-fluid rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
-                                alt="..." />
-                            <div class="ms-3">
-                                <div class="fw-bold">Valerie Luna</div>
-                                <div class="text-muted">News, Business</div>
+                <!-- Start CAGR -->
+                <div class="row gx-5 mb-5 mt-5">
+                    <h2 class="mb-4">{{ stock.CompanyName }} Compounded Annual Growth Rates</h2>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ revenue_cagr }}%</h5>
+                                <p class="card-text">5yr Revenue CAGR</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-9">
-                        <!-- Post content-->
-                        <article>
-                            <!-- Post header-->
-                            <header class="mb-4">
-                                <!-- Post title-->
-                                <h1 class="fw-bolder mb-1">Welcome to Blog Post!</h1>
-                                <!-- Post meta content-->
-                                <div class="text-muted fst-italic mb-2">January 1, 2023</div>
-                                <!-- Post categories-->
-                                <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                                <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
-                            </header>
-                            <!-- Preview image figure-->
-                            <figure class="mb-4"><img class="img-fluid rounded"
-                                    src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
-                            <!-- Post content-->
-                            <section class="mb-5">
-                                <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of
-                                    the free human mind. Because it transforms who we are, how we live, and it gives us
-                                    an understanding of our place in the universe.</p>
-                                <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we
-                                    know it are everywhere, so there's no reason to think that Earth would be unique in
-                                    that regard. Whether of not the life became intelligent is a different question, and
-                                    we'll see if we find that.</p>
-                                <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large
-                                    enough and carry enough energy into our system to disrupt transportation,
-                                    communication, the food chains, and that can be a really bad day on Earth.</p>
-                                <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
-                                <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd
-                                    cosmic thoughts every day and I realized I could hold them to myself or share them
-                                    with people who might be interested.</p>
-                                <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what
-                                    happened there because we're twirling knobs here on Earth without knowing the
-                                    consequences of it. Mars once had running water. It's bone dry today. Something bad
-                                    happened there as well.</p>
-                            </section>
-                        </article>
-                        <!-- Comments section-->
-                        <section>
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <!-- Comment form-->
-                                    <form class="mb-4"><textarea class="form-control" rows="3"
-                                            placeholder="Join the discussion and leave a comment!"></textarea></form>
-                                    <!-- Comment with nested comments-->
-                                    <div class="d-flex mb-4">
-                                        <!-- Parent comment-->
-                                        <div class="flex-shrink-0"><img class="rounded-circle"
-                                                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                        <div class="ms-3">
-                                            <div class="fw-bold">Commenter Name</div>
-                                            If you're going to lead a space frontier, it has to be government; it'll
-                                            never be private enterprise. Because the space frontier is dangerous, and
-                                            it's expensive, and it has unquantified risks.
-                                            <!-- Child comment 1-->
-                                            <div class="d-flex mt-4">
-                                                <div class="flex-shrink-0"><img class="rounded-circle"
-                                                        src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
-                                                        alt="..." /></div>
-                                                <div class="ms-3">
-                                                    <div class="fw-bold">Commenter Name</div>
-                                                    And under those conditions, you cannot establish a capital-market
-                                                    evaluation of that enterprise. You can't get investors.
-                                                </div>
-                                            </div>
-                                            <!-- Child comment 2-->
-                                            <div class="d-flex mt-4">
-                                                <div class="flex-shrink-0"><img class="rounded-circle"
-                                                        src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
-                                                        alt="..." /></div>
-                                                <div class="ms-3">
-                                                    <div class="fw-bold">Commenter Name</div>
-                                                    When you put money directly to a problem, it makes a good headline.
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Single comment-->
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0"><img class="rounded-circle"
-                                                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                        <div class="ms-3">
-                                            <div class="fw-bold">Commenter Name</div>
-                                            When I look at the universe and all the ways the universe wants to kill us,
-                                            I find it hard to reconcile that with statements of beneficence.
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ op_inc_cagr }}%</h5>
+                                <p class="card-text">5yr Operting Income CAGR</p>
                             </div>
-                        </section>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ net_inc_exc_ext_cagr }}%</h5>
+                                <p class="card-text">5yr Net Income CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ eps_cagr }}%</h5>
+                                <p class="card-text">5yr EPS CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ revenue_cagr }}%</h5>
+                                <p class="card-text">5yr Revenue CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ dividend_cagr }}%</h5>
+                                <p class="card-text">5yr Dividend CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ cashops_cagr }}%</h5>
+                                <p class="card-text">5yr Cash From Operations CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ capex_cagr }}%</h5>
+                                <p class="card-text">5yr Capex CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ equity_cagr }}%</h5>
+                                <p class="card-text">5yr Equity CAGR</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ dividend_cagr }}%</h5>
+                                <p class="card-text">5yr Dividend CAGR</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- End CAGR -->
+
+                <!-- Start Fundamental Data -->
+                <div class="row gx-5 mb-5 mt-5">
+                    <h2 class="mb-4">{{ stock.CompanyName }} Historical Data</h2>
+                    {% load my_custom_filters %}
+                    {% for statement, data in fin_data.items %}
+                    <h3 class="mb-4 mt-4">{{ statement }}</h3>
+                    <table class="table table-striped historical-data">
+                        <thead>
+                            <tr class="table-primary">
+                                <th></th>
+                                {% for year in years %}
+                                <th>{{ year }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name, values in data.items %}
+                            <tr>
+                                <td class="table-column">{{ name }}</td>
+                                {% for year in years %}
+                                <td>
+                                    {% if values|length > 0 and year in values %}
+                                    {{ values|get_item:year }}
+                                    {% else %}
+                                    &nbsp;
+                                    <!-- A non-breaking space to ensure the cell is not collapsed when empty -->
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endfor %}
+                </div>
+                <!-- End Fundamental Data -->
+
             </div>
         </section>
     </main>
     <!-- Footer-->
-    <footer class="bg-dark py-4 mt-auto">
-        <div class="container px-5">
-            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                <div class="col-auto">
-                    <div class="small m-0 text-white">Copyright &copy; Your Website 2023</div>
-                </div>
-                <div class="col-auto">
-                    <a class="link-light small" href="#!">Privacy</a>
-                    <span class="text-white mx-1">&middot;</span>
-                    <a class="link-light small" href="#!">Terms</a>
-                    <span class="text-white mx-1">&middot;</span>
-                    <a class="link-light small" href="#!">Contact</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    {% include 'global/footer.html' %}
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->

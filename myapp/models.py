@@ -93,7 +93,6 @@ class CoFinExport(models.Model):
     RefValue = models.FloatField()
     DataSource = models.CharField(max_length=255)
     Reliability = models.IntegerField()
-    comment = models.TextField()
     PeriodEnd = models.DateField(db_index=True)
 
 
@@ -123,3 +122,22 @@ class CAGR(models.Model):
 
     class Meta:
         db_table = 'cagr'
+
+class StockSector(models.Model):
+    StockID = models.OneToOneField(Stock,primary_key=True, db_column='StockID', on_delete=models.CASCADE)
+    SectorID = models.IntegerField()
+
+    class Meta:
+        db_table = 'stock_sector'
+        managed = False 
+    
+
+    
+class Sector(models.Model):
+    ID = models.IntegerField(primary_key=True, db_column='ID')
+    SecGrpID = models.IntegerField()
+    SectorName = models.CharField(max_length=255)
+    
+    class Meta:
+        db_table = 'sector'
+        managed = False 
