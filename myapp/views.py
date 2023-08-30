@@ -19,24 +19,28 @@ def stock_detail(request, slug):
     cagr_data = CAGR.objects.get(StockID=stock.pk)    
 
     # Modify the fields as percentages
-    revenue_cagr = cagr_data.Revenue_CAGR * 100
-    op_inc_cagr = cagr_data.Op_Inc_CAGR * 100
-    net_inc_exc_ext_cagr = cagr_data.Net_Inc_exc_ext_CAGR * 100
-    eps_cagr = cagr_data.EPS_CAGR * 100
-    dividend_cagr = cagr_data.Dividend_CAGR * 100
-    cashops_cagr = cagr_data.CashOps_CAGR * 100
-    capex_cagr = cagr_data.Capex_CAGR * 100
-    equity_cagr = cagr_data.Equity_CAGR * 100
+    revenue_cagr = cagr_data.Revenue_CAGR * 100 if cagr_data.Revenue_CAGR is not None else None
+    op_inc_cagr = cagr_data.Op_Inc_CAGR * 100 if cagr_data.Op_Inc_CAGR is not None else None
+    net_inc_exc_ext_cagr = cagr_data.Net_Inc_exc_ext_CAGR * 100 if cagr_data.Net_Inc_exc_ext_CAGR is not None else None
+    eps_cagr = cagr_data.EPS_CAGR * 100 if cagr_data.EPS_CAGR is not None else None
+    dividend_cagr = cagr_data.Dividend_CAGR * 100 if cagr_data.Dividend_CAGR is not None else None
+    cashops_cagr = cagr_data.CashOps_CAGR * 100 if cagr_data.CashOps_CAGR is not None else None
+    capex_cagr = cagr_data.Capex_CAGR * 100 if cagr_data.Capex_CAGR is not None else None
+    equity_cagr = cagr_data.Equity_CAGR * 100 if cagr_data.Equity_CAGR is not None else None
+
+
 
     # Round the values to 2 decimal places
-    revenue_cagr = Decimal(revenue_cagr).quantize(Decimal('0.00'))
-    op_inc_cagr = Decimal(op_inc_cagr).quantize(Decimal('0.00'))
-    net_inc_exc_ext_cagr = Decimal(net_inc_exc_ext_cagr).quantize(Decimal('0.00'))
-    eps_cagr = Decimal(eps_cagr).quantize(Decimal('0.00'))
-    dividend_cagr = Decimal(dividend_cagr).quantize(Decimal('0.00'))
-    cashops_cagr = Decimal(cashops_cagr).quantize(Decimal('0.00'))
-    capex_cagr = Decimal(capex_cagr).quantize(Decimal('0.00'))
-    equity_cagr = Decimal(equity_cagr).quantize(Decimal('0.00'))
+    revenue_cagr = Decimal(revenue_cagr).quantize(Decimal('0.00')) if revenue_cagr is not None else None
+    op_inc_cagr = Decimal(op_inc_cagr).quantize(Decimal('0.00')) if op_inc_cagr is not None else None
+    net_inc_exc_ext_cagr = Decimal(net_inc_exc_ext_cagr).quantize(Decimal('0.00')) if net_inc_exc_ext_cagr is not None else None
+    eps_cagr = Decimal(eps_cagr).quantize(Decimal('0.00')) if eps_cagr is not None else None
+    dividend_cagr = Decimal(dividend_cagr).quantize(Decimal('0.00')) if dividend_cagr is not None else None
+    cashops_cagr = Decimal(cashops_cagr).quantize(Decimal('0.00')) if cashops_cagr is not None else None
+    capex_cagr = Decimal(capex_cagr).quantize(Decimal('0.00')) if capex_cagr is not None else None
+    equity_cagr = Decimal(equity_cagr).quantize(Decimal('0.00')) if equity_cagr is not None else None
+    
+
     
     fin_data = get_financials_for_stock(stock.pk)
     years = sorted(next(iter(next(iter(fin_data.values())).values())).keys())  # get the years from one of the data dictionaries   
@@ -102,53 +106,123 @@ def get_financials_for_stock(stock_id):
 
 
 def get_stock_data(stock):
+    # Fetch CAGR data for this stock
     cagr_data = CAGR.objects.get(StockID=stock.pk)
 
-    # get latest date financial data
-    latest_date = CoFinExport.objects.filter(StockID=stock.pk).aggregate(Max('PeriodEnd'))['PeriodEnd__max']
-
-    # list of financial data names we need to fetch
-    fin_data_names = ['PE ratio', 'dividend', 'eps']
-
-    fin_data_latest = {}
-    if latest_date is not None:
-        for name in fin_data_names:
-            try:
-                fin_id = FinData.objects.get(FinDataName=name).ID
-                data_point = CoFinExport.objects.get(StockID=stock.pk, FinDataID=fin_id, PeriodEnd=latest_date)
-                fin_data_latest[name] = data_point.RepValue
-            except FinData.DoesNotExist or CoFinExport.DoesNotExist:
-                fin_data_latest[name] = None
-
+    # Fetch stock sector and sector name
     stock_sector = StockSector.objects.get(StockID=stock.pk)
     sector = Sector.objects.get(ID=stock_sector.SectorID)
     sector_name = sector.SectorName.title()
 
+    # Fetch country and country name
     country = Country.objects.get(ID=stock.CountryID)
     country_name = country.LongName
+
+    # Calculate Dividend CAGR as percentage
+    dividend_cagr = cagr_data.Dividend_CAGR * 100 if cagr_data.Dividend_CAGR is not None else None
+
+    # Round the Dividend CAGR to 2 decimal places
+    dividend_cagr = Decimal(dividend_cagr).quantize(Decimal('0.00')) if dividend_cagr is not None else None
+
+    # Calculate financial data
+    fin_data_latest = {
+        'P_E': cagr_data.P_E if cagr_data.P_E else 0.00,
+        'Yield_Percent': cagr_data.Yield_Percent * 100 if cagr_data.Yield_Percent else 0.00,
+        'Price_HiLo': cagr_data.Price_HiLo * 100 if cagr_data.Price_HiLo else 0.00,
+    }
 
     return {
         'stock': stock,
         'sector_name': sector_name,
         'country_name': country_name,
-        'fin_data_latest': fin_data_latest,  
+        'fin_data_latest': fin_data_latest,
         'cagr_data': cagr_data,
+        'dividend_cagr': dividend_cagr,  # Dividend CAGR as percentage
     }
 
-def stock_screener(request):
-    stocks_list = Stock.objects.all()
-    paginator = Paginator(stocks_list, 20)  # Show 50 stocks per page
 
+def stock_screener(request):
+    # get filter parameters from request
+    country_id = request.GET.get('country')
+    pe_from = request.GET.get('pe_from')
+    pe_to = request.GET.get('pe_to')
+    dividend_from = request.GET.get('dividend_from')
+    dividend_to = request.GET.get('dividend_to')
+
+    # initialize query set
+    stocks_list = Stock.objects.all()
+
+    # filter stocks based on filter parameters
+    if country_id:
+        stocks_list = stocks_list.filter(CountryID=country_id)
+
+    if pe_from and pe_to:
+        pe_from = float(pe_from)
+        pe_to = float(pe_to)
+        stocks_list = stocks_list.filter(cagr__P_E__gte=pe_from, cagr__P_E__lte=pe_to)
+
+    if dividend_from and dividend_to:
+        dividend_from = float(dividend_from)
+        dividend_to = float(dividend_to)
+        stocks_list = stocks_list.filter(cagr__Yield_Percent__gte=dividend_from/100, cagr__Yield_Percent__lte=dividend_to/100)
+
+    # pagination
+    paginator = Paginator(stocks_list, 20)  # Show 20 stocks per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    # get other necessary data
+    countries = Country.objects.all()
     stocks_data = []
-
     for stock in page_obj:
         stock_data = get_stock_data(stock)
         stocks_data.append(stock_data)
 
-    return render(request, 'stock_screener.html', {'stocks_data': stocks_data, 'page_obj': page_obj})
+    return render(request, 'stock_screener.html', {'stocks_data': stocks_data, 'page_obj': page_obj, 'countries': countries})
+
+def dividend_screener(request):
+    # get filter parameters from request
+    country_id = request.GET.get('country')
+    dividend_from = request.GET.get('dividend_from')
+    dividend_to = request.GET.get('dividend_to')
+    dividend_cagr_from = request.GET.get('dividend_cagr_from')
+    dividend_cagr_to = request.GET.get('dividend_cagr_to')
+
+    # initialize query set
+    stocks_list = Stock.objects.all()
+
+    # filter stocks based on filter parameters
+    if country_id:
+        stocks_list = stocks_list.filter(CountryID=country_id)
+
+    if dividend_from and dividend_to:
+        dividend_from = float(dividend_from)
+        dividend_to = float(dividend_to)
+        stocks_list = stocks_list.filter(cagr__Yield_Percent__gte=dividend_from, cagr__Yield_Percent__lte=dividend_to)
+
+    # New: filter stocks based on Dividend CAGR
+    if dividend_cagr_from and dividend_cagr_to:
+        dividend_cagr_from = float(dividend_cagr_from) / 100  # Converting to decimal
+        dividend_cagr_to = float(dividend_cagr_to) / 100  # Converting to decimal
+        stocks_list = stocks_list.filter(cagr__Dividend_CAGR__gte=dividend_cagr_from, cagr__Dividend_CAGR__lte=dividend_cagr_to)
+
+    # pagination
+    paginator = Paginator(stocks_list, 20)  # Show 20 stocks per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # get other necessary data
+    countries = Country.objects.all()
+    stocks_data = []
+    for stock in page_obj:
+        stock_data = get_stock_data(stock)
+        stocks_data.append(stock_data)
+
+    return render(request, 'dividend-screener.html', {'stocks_data': stocks_data, 'page_obj': page_obj, 'countries': countries})
+
+
+
+
 
 
 

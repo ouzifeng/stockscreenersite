@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<str:slug>-stock-financial-information/', views.stock_detail, name='stock_detail'),
     path('stock-screener', views.stock_screener, name='stock_screener'),
+    path('dividend-screener', views.dividend_screener, name='dividend_screener'),
 ]

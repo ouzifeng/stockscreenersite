@@ -18,6 +18,8 @@
 
 <body class="d-flex flex-column">
     {% load currency_symbols %}
+    {% load stock_ticker_filter %}
+
     <main class="flex-shrink-0">
         <!-- Navigation-->
         {% include 'global/nav-bar.html' %}
@@ -45,7 +47,7 @@
                                     {
                                         "symbols": [
                                             [
-                                                "NYSE:ZTS|1M"
+                                                "{{ stock.GFTicker|convert_to_tv_ticker }}|1M"
                                             ]
                                         ],
                                             "chartOnly": true,
@@ -93,6 +95,7 @@
                                             <th>Financial Times Ticker</th>
                                             <th>Yahoo Finance Ticker</th>
                                             <th>Google Finance Ticker</th>
+                                            <th>TV Finance Ticker</th>
                                             <th>Bloomberg Ticker</th>
                                             <th>Company URL</th>
                                         </tr>
@@ -101,6 +104,7 @@
                                             <td>{{ stock.FTTicker }}</td>
                                             <td>{{ stock.YFTicker }}</td>
                                             <td>{{ stock.GFTicker }}</td>
+                                            <td>{{ stock.GFTicker|convert_to_tv_ticker }}</td>
                                             <td>{{ stock.BBTicker }}</td>
                                             <td><a href="{{ stock.StockURL }}" target="_blank">VISIT</a></td>
                                         </tr>
@@ -120,7 +124,7 @@
                                     src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js"
                                     async>
                                         {
-                                            "symbol": "NYSE:ZTS",
+                                            "symbol": "{{ stock.GFTicker|convert_to_tv_ticker }}",
                                                 "width": "100%",
                                                     "colorTheme": "light",
                                                         "isTransparent": true,
